@@ -1,8 +1,5 @@
 # college-project-customers-management-mobile-application
 
-### VScode extensions:
-- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-
 ### Build app
 - #### Init capacitor in root project folder
 > npx cap init
