@@ -1,7 +1,7 @@
 # csi-mobile-programming
 Mobile programming discipline codes
 
-## Ferramentas
+## Ferramentas Ionic
 - Nodejs
 - Npm
 - n package (nodejs version manager)
@@ -9,4 +9,4 @@ Mobile programming discipline codes
 - Android Studio
 - Ionic / ionic lab
 
-## Angular 
+## Ferramentas Flutter
