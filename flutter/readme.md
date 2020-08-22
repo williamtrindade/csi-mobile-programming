@@ -8,11 +8,11 @@ ___
 - [Flutter hello world video tutorial(pt-br)](https://www.youtube.com/watch?v=dsCpY42V3TE)  
 ___
 ## Commands  
-- ### Verify installation  
+### Verify installation  
 > $ flutter doctor  
-- ### List emulations  
+### List emulations  
 > $ flutter emulators  
-- ### Run emulator  
-> $ flutter emulators --launch Pixel_2_API_30  
-- ### Run project
+### Run emulator  
+> $ flutter emulators --launch {{emulator id}}
+### Run project
 > $ flutter run   
