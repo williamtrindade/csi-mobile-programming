@@ -1,4 +1,5 @@
 ## Flutter tools
+- [Dart SDK](https://dart.dev/get-dart)  
 - [Flutter SDK](https://flutter.dev/docs/get-started/install/linux)  
 - [Java Oracle Open JDK](https://openjdk.java.net/)  
 - [Android Studio(AVD + Android SDK)](https://developer.android.com/studio)  
