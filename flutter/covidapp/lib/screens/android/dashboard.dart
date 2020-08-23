@@ -21,7 +21,24 @@ class Dashboard extends StatelessWidget {
           )
         ],
       ),
-      body: Text('corpo')
+      body: Column(
+        children: <Widget>[
+          Container(
+            // color: Colors.blue,
+            alignment: Alignment.topRight,
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Checklist Covid-19',
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.6),
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic
+              ),
+            )
+          ),
+        ],
+      )
     );
   }
 }
