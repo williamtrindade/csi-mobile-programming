@@ -14,7 +14,7 @@ class Login extends StatelessWidget {
         width: double.infinity,
         child: RaisedButton(
           onPressed: () {
-            Navigator.of(context).push(
+            Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) => Dashboard()
                 )
