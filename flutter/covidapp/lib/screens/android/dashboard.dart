@@ -1,4 +1,5 @@
 import 'package:covidapp/screens/android/login.dart';
+import 'package:covidapp/screens/android/patient/patient_list.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatelessWidget {
@@ -32,11 +33,15 @@ class Dashboard extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 children: [
                   _ElementItem('Pacientes', Icons.accessibility_new, onClick: () {
-                    debugPrint('Pacientes');
+                    Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => PatientList()
+                        )
+                    );
                   }),
                   _ElementItem('Resultados', Icons.check, onClick: () {
                     debugPrint('Resultados');
-                  }),
+                  }),                                                                                                                                   
                 ],
               ),
             )
@@ -118,4 +123,3 @@ class _ElementItem extends StatelessWidget {
     );
   }
 }
-
