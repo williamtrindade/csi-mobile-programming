@@ -8,10 +8,10 @@ import 'models/patient_model.dart';
 
 void main() {
   _generatepatients() {
-    PatientModel p1 = PatientModel(1, 'William2', 'wil@odig.net', '42342423', 21, 'laraverl');
-    PatientModel p2 = PatientModel(1, 'William', 'wil@odig.net', '42342423', 21, 'laraverl');
-    PatientModel p3 = PatientModel(1, 'William', 'wil@odig.net', '42342423', 21, 'laraverl');
-    PatientModel p4 = PatientModel(1, 'William', 'wil@odig.net', '42342423', 21, 'laraverl');
+    PatientModel p1 = PatientModel(1, 'William2', 'wil@odig.net', '42342423', 21, 'laraverl', '');
+    PatientModel p2 = PatientModel(1, 'William', 'wil@odig.net', '42342423', 21, 'laraverl', '');
+    PatientModel p3 = PatientModel(1, 'William', 'wil@odig.net', '42342423', 21, 'laraverl', '');
+    PatientModel p4 = PatientModel(1, 'William', 'wil@odig.net', '42342423', 21, 'laraverl', '');
     PatientDAO.add(p1);
     PatientDAO.add(p2);
     PatientDAO.add(p3);

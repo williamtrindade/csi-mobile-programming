@@ -1,9 +1,20 @@
+import 'dart:io';
+
 import 'package:covidapp/database/patient_dao.dart';
 import 'package:covidapp/models/patient_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
-class PatientCreate extends StatelessWidget {
+// ignore: must_be_immutable
+class PatientCreate extends StatefulWidget {
+
+  @override
+  _PatientCreateState createState() => _PatientCreateState();
+}
+
+class _PatientCreateState extends State<PatientCreate> {
 
   final TextEditingController _nameTextEditingController = TextEditingController();
   final TextEditingController _emailTextEditingController = TextEditingController();
@@ -110,7 +121,8 @@ class PatientCreate extends StatelessWidget {
                             this._emailTextEditingController.text,
                             this._cardTextEditingController.text,
                             int.tryParse(this._ageTextEditingController.text),
-                            this._passTextEditingController.text
+                            this._passTextEditingController.text,
+                            this._userPhoto
                         );
                         PatientDAO.add(patientModel);
                         Navigator.of(context).pop();
@@ -119,7 +131,7 @@ class PatientCreate extends StatelessWidget {
                       }
                     },
                     child: Text(
-                      'Salvar', 
+                      'Salvar',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18.0,
@@ -137,15 +149,26 @@ class PatientCreate extends StatelessWidget {
   }
 
   Widget _avatarPhoto(BuildContext buildContext) {
-    return InkWell(
-      onTap: () {
-        takeShotAlertDialog(buildContext);
-      },
-      child: CircleAvatar(
-        backgroundColor: Colors.white,
-        backgroundImage: AssetImage('images/photo.png'),
-        radius: 70,
-      ),
+    return Column(
+      children: [
+        InkWell(
+          onTap: () {
+            this.takeShotAlertDialog(buildContext);
+          },
+          child: CircleAvatar(
+            backgroundColor: Colors.white,
+            child: ClipOval(
+                child: SizedBox(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: this._userPhotoWidget(),
+                )
+            ),
+            radius: 70,
+          ),
+        ),
+        Text('Foto do paciente'),
+      ],
     );
   }
 
@@ -157,15 +180,15 @@ class PatientCreate extends StatelessWidget {
       actions: [
         FlatButton(
           onPressed: () {
+            _getImage(ImageSource.camera);
             Navigator.of(buildContext).pop();
-            debugPrint('usurio escolheu camera');
           },
           child: Text('Camera'),
         ),
         FlatButton(
           onPressed: () {
+            _getImage(ImageSource.gallery);
             Navigator.of(buildContext).pop();
-            debugPrint('usurio escolheu galeria');
           },
           child: Text('Galeria'),
         ),
@@ -178,5 +201,43 @@ class PatientCreate extends StatelessWidget {
         return alertDialog;
       }
     );
+  }
+
+  String _userPhoto = '';
+
+  _getImage(ImageSource imageSource) async {
+    final image = await ImagePicker().getImage(source: imageSource);
+
+    if (image != null) {
+      File cropped = await ImageCropper.cropImage(
+        sourcePath: image.path,
+        aspectRatio: CropAspectRatio(ratioY: 1, ratioX: 1),
+        compressQuality: 100,
+        maxWidth: 700,
+        maxHeight: 700,
+        compressFormat: ImageCompressFormat.jpg,
+        androidUiSettings: AndroidUiSettings(
+          toolbarColor: Colors.white,
+          toolbarTitle: 'Cortar imagem',
+          statusBarColor: Colors.blue,
+          backgroundColor: Colors.white,
+        )
+      );
+      setState(() {
+        this._userPhoto = cropped.path;
+      });
+    }
+  }
+
+  _userPhotoWidget() {
+    Widget child;
+    if (this._userPhoto == '') {
+      child = Icon(Icons.camera, size: 100,);
+    } else {
+      child = Image.file(
+          File(this._userPhoto)
+      );
+    }
+    return child;
   }
 }

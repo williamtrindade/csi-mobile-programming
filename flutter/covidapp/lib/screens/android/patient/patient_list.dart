@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:covidapp/database/patient_dao.dart';
 import 'package:covidapp/models/patient_model.dart';
 import 'package:covidapp/screens/android/patient/patient_create.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:random_color/random_color.dart';
 
 class PatientList extends StatefulWidget {
   @override
@@ -68,14 +71,45 @@ class PatientItem extends StatelessWidget {
 
   PatientItem(this._patientModel);
 
+  Widget _oldUserPhoto() {
+    return CircleAvatar(
+      backgroundImage: AssetImage('images/avatar.jpg'),
+    );
+  }
+
+  Widget _userPhoto() {
+
+    RandomColor randomColor = RandomColor();
+
+    Color color = randomColor.randomColor(
+      colorBrightness: ColorBrightness.light
+    );
+
+    var nameInitial = this._patientModel.name[0].toUpperCase();
+    if (this._patientModel.photo.length > 0) {
+      nameInitial = '';
+    }
+
+    return CircleAvatar(
+      backgroundColor: color,
+      foregroundColor: Colors.white,
+      backgroundImage: FileImage(File(this._patientModel.photo)),
+      child: Text(
+        nameInitial,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      radius: 22.0,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ListTile(
-          leading: CircleAvatar(
-            backgroundImage: AssetImage('images/avatar.jpg'),
-          ),
+          leading: this._userPhoto(),
           title: Text(
             this._patientModel.name,
             style: TextStyle(fontSize: 24),

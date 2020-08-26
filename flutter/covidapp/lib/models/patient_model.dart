@@ -5,8 +5,11 @@ class PatientModel {
   String _card;
   int _age;
   String _pass;
+  String _photo;
 
-  PatientModel(this._id, this._name, this._email, this._card, this._age, this._pass);
+  PatientModel(this._id, this._name, this._email, this._card, this._age, this._pass, this._photo);
+
+  String get photo => _photo;
 
   String get pass => _pass;
 
