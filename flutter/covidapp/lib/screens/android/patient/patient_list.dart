@@ -42,7 +42,18 @@ class _PatientListState extends State<PatientList> {
                 itemCount: _patients.length,
                 itemBuilder: (context, index) {
                   final PatientModel p = _patients[index];
-                  return PatientItem(p);
+                  return PatientItem(
+                    p,
+                    onClick: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => PatientCreate(index: index))
+                      ).then((value) {
+                        setState(() {
+                          debugPrint('voltou');
+                        });
+                      });
+                    },
+                  );
                 },
               ),
             ),
@@ -69,7 +80,11 @@ class PatientItem extends StatelessWidget {
 
   final PatientModel _patientModel;
 
-  PatientItem(this._patientModel);
+  final Function onClick;
+
+  PatientItem(this._patientModel, {@required this.onClick});
+
+
 
   Widget _oldUserPhoto() {
     return CircleAvatar(
@@ -109,6 +124,7 @@ class PatientItem extends StatelessWidget {
     return Column(
       children: [
         ListTile(
+          onTap: () => this.onClick(),
           leading: this._userPhoto(),
           title: Text(
             this._patientModel.name,
@@ -137,10 +153,6 @@ class PatientItem extends StatelessWidget {
         debugPrint('slecionado $selected');
       },
       itemBuilder: (BuildContext context) => <PopupMenuItem<ListPatientsMenuItems>>[
-        const PopupMenuItem(
-          value: ListPatientsMenuItems.edit,
-          child: Text('Editar'),
-        ),
         const PopupMenuItem(
           value: ListPatientsMenuItems.results,
           child: Text('Resultados'),

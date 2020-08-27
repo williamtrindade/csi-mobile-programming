@@ -7,7 +7,8 @@ class PatientModel {
   String _pass;
   String _photo;
 
-  PatientModel(this._id, this._name, this._email, this._card, this._age, this._pass, this._photo);
+  PatientModel(this._id, this._name, this._email, this._card, this._age,
+      this._pass, this._photo);
 
   String get photo => _photo;
 
@@ -22,4 +23,15 @@ class PatientModel {
   String get name => _name;
 
   int get id => _id;
+
+  // ignore: unnecessary_getters_setters
+  set id(int value) {
+    _id = value;
+  }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return 'Patient{id: ${id}, nome: ${name}, email: ${email}';
+  }
 }

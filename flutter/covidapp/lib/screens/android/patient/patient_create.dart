@@ -9,23 +9,47 @@ import 'package:image_picker/image_picker.dart';
 
 // ignore: must_be_immutable
 class PatientCreate extends StatefulWidget {
+  int index;
+  PatientCreate({int index}) {
+    this.index = index;
+    if (this.index == null) {
+      this.index = -1;
+    }
+  }
 
   @override
   _PatientCreateState createState() => _PatientCreateState();
 }
 
 class _PatientCreateState extends State<PatientCreate> {
-
-  final TextEditingController _nameTextEditingController = TextEditingController();
-  final TextEditingController _emailTextEditingController = TextEditingController();
-  final TextEditingController _cardTextEditingController = TextEditingController();
-  final TextEditingController _ageTextEditingController = TextEditingController();
-  final TextEditingController _passTextEditingController = TextEditingController();
+  final TextEditingController _nameTextEditingController =
+      TextEditingController();
+  final TextEditingController _emailTextEditingController =
+      TextEditingController();
+  final TextEditingController _cardTextEditingController =
+      TextEditingController();
+  final TextEditingController _ageTextEditingController =
+      TextEditingController();
+  final TextEditingController _passTextEditingController =
+      TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
+  PatientModel _patientModel;
   @override
   Widget build(BuildContext context) {
+    if (widget.index >= 0) {
+      debugPrint('editar' + widget.index.toString());
+
+      this._patientModel = PatientDAO.getPatient(widget.index);
+      this._patientModel.id = widget.index;
+      this._nameTextEditingController.text = this._patientModel.name;
+      this._emailTextEditingController.text = this._patientModel.email;
+      this._ageTextEditingController.text = this._patientModel.age.toString();
+      this._cardTextEditingController.text = this._patientModel.card;
+      this._passTextEditingController.text = this._patientModel.pass;
+      this._userPhoto = this._patientModel.photo;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Adicionar paciente'),
@@ -116,15 +140,19 @@ class _PatientCreateState extends State<PatientCreate> {
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
                         PatientModel patientModel = new PatientModel(
-                            0,
+                            widget.index,
                             this._nameTextEditingController.text,
                             this._emailTextEditingController.text,
                             this._cardTextEditingController.text,
                             int.tryParse(this._ageTextEditingController.text),
                             this._passTextEditingController.text,
-                            this._userPhoto
-                        );
-                        PatientDAO.add(patientModel);
+                            this._userPhoto);
+
+                        if (widget.index >= 0) {
+                          PatientDAO.update(patientModel);
+                        } else {
+                          PatientDAO.add(patientModel);
+                        }
                         Navigator.of(context).pop();
                       } else {
                         debugPrint('invalid');
@@ -159,11 +187,10 @@ class _PatientCreateState extends State<PatientCreate> {
             backgroundColor: Colors.white,
             child: ClipOval(
                 child: SizedBox(
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: this._userPhotoWidget(),
-                )
-            ),
+              width: double.infinity,
+              height: double.infinity,
+              child: this._userPhotoWidget(),
+            )),
             radius: 70,
           ),
         ),
@@ -174,7 +201,10 @@ class _PatientCreateState extends State<PatientCreate> {
 
   takeShotAlertDialog(BuildContext buildContext) {
     AlertDialog alertDialog = AlertDialog(
-      title: Text('Tirar foto', style: TextStyle(fontWeight: FontWeight.bold),),
+      title: Text(
+        'Tirar foto',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
       content: Text('Escolha entre a camera ou galeraia para a foto'),
       elevation: 5.0,
       actions: [
@@ -196,11 +226,10 @@ class _PatientCreateState extends State<PatientCreate> {
     );
 
     showDialog(
-      context: buildContext,
-      builder: (BuildContext context) {
-        return alertDialog;
-      }
-    );
+        context: buildContext,
+        builder: (BuildContext context) {
+          return alertDialog;
+        });
   }
 
   String _userPhoto = '';
@@ -210,19 +239,18 @@ class _PatientCreateState extends State<PatientCreate> {
 
     if (image != null) {
       File cropped = await ImageCropper.cropImage(
-        sourcePath: image.path,
-        aspectRatio: CropAspectRatio(ratioY: 1, ratioX: 1),
-        compressQuality: 100,
-        maxWidth: 700,
-        maxHeight: 700,
-        compressFormat: ImageCompressFormat.jpg,
-        androidUiSettings: AndroidUiSettings(
-          toolbarColor: Colors.white,
-          toolbarTitle: 'Cortar imagem',
-          statusBarColor: Colors.blue,
-          backgroundColor: Colors.white,
-        )
-      );
+          sourcePath: image.path,
+          aspectRatio: CropAspectRatio(ratioY: 1, ratioX: 1),
+          compressQuality: 100,
+          maxWidth: 700,
+          maxHeight: 700,
+          compressFormat: ImageCompressFormat.jpg,
+          androidUiSettings: AndroidUiSettings(
+            toolbarColor: Colors.white,
+            toolbarTitle: 'Cortar imagem',
+            statusBarColor: Colors.blue,
+            backgroundColor: Colors.white,
+          ));
       setState(() {
         this._userPhoto = cropped.path;
       });
@@ -232,11 +260,12 @@ class _PatientCreateState extends State<PatientCreate> {
   _userPhotoWidget() {
     Widget child;
     if (this._userPhoto == '') {
-      child = Icon(Icons.camera, size: 100,);
-    } else {
-      child = Image.file(
-          File(this._userPhoto)
+      child = Icon(
+        Icons.camera,
+        size: 100,
       );
+    } else {
+      child = Image.file(File(this._userPhoto));
     }
     return child;
   }
