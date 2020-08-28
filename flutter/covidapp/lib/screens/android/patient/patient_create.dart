@@ -36,9 +36,12 @@ class _PatientCreateState extends State<PatientCreate> {
   final _formKey = GlobalKey<FormState>();
 
   PatientModel _patientModel;
+
+  bool _isUpdate = false;
+
   @override
   Widget build(BuildContext context) {
-    if (widget.index >= 0) {
+    if (widget.index >= 0 && this._isUpdate == false) {
       debugPrint('editar' + widget.index.toString());
 
       this._patientModel = PatientDAO.getPatient(widget.index);
@@ -49,6 +52,8 @@ class _PatientCreateState extends State<PatientCreate> {
       this._cardTextEditingController.text = this._patientModel.card;
       this._passTextEditingController.text = this._patientModel.pass;
       this._userPhoto = this._patientModel.photo;
+
+      this._isUpdate = true;
     }
     return Scaffold(
       appBar: AppBar(
